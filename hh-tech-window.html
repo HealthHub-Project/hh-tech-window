@@ -1,0 +1,221 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="hh-tech-window">
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 450px;
+        height: 700px;
+        background-color: #2d333e;
+      }
+
+      .container {
+        display: flex;
+        flex: 1 1;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+      }
+
+      .class-container-title{
+        display: flex;
+        flex-direction: row;
+        /*justify-content: space-between;*/
+        align-items: center;
+        padding-left: 10px;
+        padding-right: 5px;
+        background-color: #252934;
+        height: 24px;
+        font-weight: bold;
+        font-size: 12px;
+
+        box-shadow: 0px 3px 9px -2px #000000;
+      }
+
+      /* patient info */
+      .patientId{
+        width: 100px;
+        text-align: right
+      }
+      .patientName{
+        width: 40px;
+        margin-left: 3px;
+      }
+      .patientAge{
+        width: 80px;
+        text-align: left;
+        /*margin-left: 3px;*/
+      }
+      .patientSex{
+        width: 13px;
+        margin-left: 3px;
+      }
+
+      input{
+        color: #aaa;
+        height: 12px;
+        font-weight: bold;
+        font-size: 12px;
+        background-color: #252934;
+        border: 0px;
+        align-items: center;
+        text-align: -webkit-center;
+      }
+
+      .class-title-window{
+        color: gray;
+        width: 115px;
+      }
+
+      .class-title{
+        height: 10px;
+        width: calc(100% - 40px);
+        margin: 10px;
+        padding: 10px;
+        /*background-color: green;*/
+
+        background-color: #252934;
+        box-shadow: 0px 3px 9px -2px #000000;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        /*height: 30px;*/
+
+        font-weight: bold;
+        /*color: #aaaaaa;*/
+        color: #2baab1;
+        font-size: 13px;
+      }
+
+      .class-title-content{
+        border-bottom: 2px solid #0087cb;
+      }
+
+      .class-title-patientInfo {
+        color: #aaa;
+        width: calc(100% - 90px);
+        text-align: center;
+      }
+
+      .class-div-thumbnail{
+        height: 355px;
+        width: 450px;
+        /*background-color: red;*/
+        background-color: rgba(255,0,0,0);
+      }
+
+      .class-div-clinicalInfo{
+        height: 33%;
+        width: 100%;
+        /*background-color: blue;*/
+        background-color: rgba(255,0,0,0);
+      }
+
+      .class-div-functionPanel{
+        height: 100px;
+        width: 100%;
+        /*background-color: orange;*/
+        background-color: rgba(255,0,0,0);
+      }
+
+      .class-content-tm{
+        height: calc(100% - 60px);
+        width: calc(100% - 20px);
+        margin: 10px;
+        background-color: #252934;
+      }
+
+      .class-content-cc{
+        height: calc(100% - 60px);
+        width: calc(100% - 20px);
+        margin: 10px;
+        background-color: #252934;
+      }
+
+      .class-content-fp{
+        height: calc(100% - 60px);
+        width: calc(100% - 20px);
+        margin: 10px;
+        background-color: #252934;
+      }
+    </style>
+    <div class="container">
+      <div class="class-container-title">
+        <div class="class-title-window">
+          Technician window
+        </div>
+        <div class="class-title-patientInfo">
+          <template is="dom-if" if="{{patient}}">
+            <input class="patientId" value="{{patient.id}}" readonly>
+            <input class="patientName" value="{{patient.name}}" readonly>
+            <input class="patientSex" value="{{patient.sex}}" readonly>
+            <input class="patientAge" value="{{patient.age}}" readonly>
+          </template>
+        </div>
+      </div><!--window title-->
+      <div class="class-div-thumbnail" >
+        <div class="class-title">
+          <div class="class-title-content" style="width: 68px">
+            Thumbnail
+          </div>
+        </div>
+        <div class="class-content-tm">
+        </div>
+      </div>
+      <div class="class-div-clinicalInfo">
+        <div class="class-title">
+          <div class="class-title-content" style="width: 70px">
+            Clinical Info
+          </div>
+        </div>
+        <div class="class-content-cc">
+        </div>
+      </div>
+      <div class="class-div-functionPanel">
+        <div class="class-title">
+          <div class="class-title-content" style="width: 90px">
+            Function Panel
+          </div>
+        </div>
+        <div class="class-content-fp">
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+    /**
+     * hh-tech-window
+     */
+    (function () {
+          let _this;
+          let g_selectedRow = new Object();
+
+          class HhTechWindow extends Polymer.Element {
+            static get is() { return 'hh-tech-window'; }
+
+            constructor() {
+              super();
+              _this = this;
+            }
+
+            ready(){
+              super.ready();
+              console.log("hh-tech-window ready");
+              this.patient = {id: "1450", name: "안길종", sex: "M", age: "47"}
+
+            }
+
+            static get properties() {
+              return {
+                patient: {
+                  type: Object
+                }
+              }
+            }
+          }
+
+          window.customElements.define(HhTechWindow.is, HhTechWindow);
+        }
+    )();
+  </script>
+</dom-module>
