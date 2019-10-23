@@ -2,7 +2,9 @@
   "name": "hh-tech-window",
   "main": "hh-tech-window.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^2.0.0"
+    "polymer": "Polymer/polymer#^2.0.0",
+    "hh-thumbnail": "hh-thumbnail#1.0.4",
+    "hh-clinical-info": "*"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
@@ -11,5 +13,24 @@
   },
   "resolutions": {
     "polymer": "^2.0.0"
-  }
+  },
+  "homepage": "https://github.com/HealthHub-Project/hh-tech-window",
+  "authors": [
+    "zzangbohyun <bohyunjang@radnet.kr>"
+  ],
+  "description": "HPACS-TECH-WINDOW",
+  "keywords": [
+    "healthhub",
+    "polymer",
+    "tech-template"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
