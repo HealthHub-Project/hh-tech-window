@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../hh-thumbnail/hh-thumbnail.html">
-<link rel="import" href="../hh-clinicla-info/hh-clinicla-info.html">
+<link rel="import" href="../hh-clinical-info/hh-clinical-info.html">
 
 <dom-module id="hh-tech-window">
   <template>
@@ -97,25 +99,25 @@
       }
 
       .class-div-thumbnail{
-        height: 510px;
+        height: 415px;
         width: 100%;
         background-color: rgba(255,0,0,0);
       }
 
       .class-div-clinicalInfo{
-        height: 33%;
+        height: calc(100% - 600px);
         width: 100%;
         background-color: rgba(255,0,0,0);
       }
 
       .class-div-functionPanel{
-        height: 19%;
+        height: 110px;
         width: 100%;
         background-color: rgba(255,0,0,0);
       }
 
       .class-content-tm{
-        height: 450px;
+        height: 355px;
         width: calc(100% - 20px);
         margin: 10px;
         background-color: #252934;
@@ -129,11 +131,55 @@
       }
 
       .class-content-fp{
-        height: 100%;
+        height: 100px;
         width: calc(100% - 20px);
         margin: 10px;
         background-color: #252934;
+        display: flex;
       }
+
+      paper-icon-button {
+        --paper-icon-button: {
+          color: #aaaaaa;
+        };
+        --paper-icon-button-hover: {
+          color: #0087cb;
+        };
+        --paper-icon-button-disabled: {
+          color: #4C5667;
+        };
+      }
+
+
+      .icon-container {
+        /*height: 100%;*/
+        margin: 0px 0;
+        padding: 0 0px;
+        text-align: center;
+        /*width: 19.3%;*/
+        display: inline-block;
+        cursor: default;
+        vertical-align: top;
+        box-sizing: border-box;
+      }
+
+      .icon-container span {
+        font-family: sans-serif;
+        display: block;
+        color: #aaaaaa;
+        transition: all 600ms;
+      }
+
+      .icon-container .label-top {
+        font-size: 11px;
+        margin: 1px;
+      }
+
+      .icon-container .label-bottom {
+        font-size: 12px;
+      }
+
+
     </style>
     <div class="container">
       <div class="class-container-title">
@@ -155,8 +201,8 @@
             Thumbnail
           </div>
         </div>
-        <div class="class-content-tm">
-          <hh-thumbnail id="hhThumbnail"></hh-thumbnail>
+        <div class="class-content-tm"style="color:white">
+          <hh-thumbnail id="techThumbnail"></hh-thumbnail>
         </div>
       </div>
       <div class="class-div-clinicalInfo">
@@ -166,7 +212,7 @@
           </div>
         </div>
         <div class="class-content-cc">
-          <hh-clinical-info id="hhClinicalInfo"></hh-clinical-info>
+          <hh-clinical-info id="techClinicalInfo"></hh-clinical-info>
         </div>
       </div>
       <div class="class-div-functionPanel">
@@ -176,10 +222,25 @@
           </div>
         </div>
         <div class="class-content-fp" style="color: white">
-          <div>Match / Unmatch</div>
-          <div>Merge / Split</div>
-          <div>Verify / Unverify</div>
-          <div>Delete</div>
+          <div class="icon-container">
+            <paper-icon-button id="matched" icon="vaadin:copy-o" on-click="" disabled></paper-icon-button>
+            <span class="label-top" id="textMach">Match</span><span class="label-top" id="textUnMatch" style="display: none">UnMatch</span>
+          </div>&nbsp;&nbsp;&nbsp;
+
+          <div class="icon-container">
+            <paper-icon-button id="matched" icon="vaadin:file-add" on-click="" disabled></paper-icon-button>
+            <span class="label-top" id="textMerge">Merge</span><span class="label-top" id="textSplit" style="display: none">Split</span>
+          </div>&nbsp;&nbsp;&nbsp;
+
+          <div class="icon-container">
+            <paper-icon-button id="matched" icon="vaadin:specialist" on-click="" disabled></paper-icon-button>
+            <span class="label-top" id="textVerify">Verify</span><span class="label-top" id="textUnVerify" style="display: none">UnVerify</span>
+          </div>&nbsp;&nbsp;&nbsp;
+
+          <div class="icon-container">
+            <paper-icon-button id="matched" icon="vaadin:file-remove" on-click="" disabled></paper-icon-button>
+            <span class="label-top" id="textDelete">Delete</span>
+          </div>&nbsp;&nbsp;&nbsp;
         </div>
       </div>
     </div>
@@ -191,6 +252,7 @@
     (function () {
               let _this;
               let g_selectedRow = new Object();
+              let g_objId;
 
               class HhTechWindow extends Polymer.Element {
                 static get is() { return 'hh-tech-window'; }
@@ -203,7 +265,8 @@
                 ready(){
                   super.ready();
                   console.log("hh-tech-window ready");
-                  this.patient = {id: "1450", name: "안길종", sex: "M", age: "47"}
+                  // this.patient = {id: "1450", name: "안길종", sex: "M", age: "47"}
+                  this.clinicalInfoReadOnly(false);
 
                 }
 
@@ -214,6 +277,76 @@
                     }
                   }
                 }
+
+                isEmpty(str) {
+                  if(typeof  str == "undefined" || str == null || str == "")
+                    return true;
+                  else
+                    return false;
+                }
+
+                nvl(str, defaultStr) {
+                  if(typeof str =="undefined" || str == null || str == "")
+                    str = defaultStr;
+                  return str;
+
+                }
+
+                setPatinetInfo(patientId, patientName, patientSex, patientAge) {
+                  this.patient = null;    // 기존 patinet 초기화
+                  let patient = new Object();
+                  patient.id = this.nvl(patientId, "N/A");
+                  patient.name = this.nvl(patientName, "N/A");
+                  patient.sex = this.nvl(patientSex, "N/A");
+                  patient.age = this.nvl(patientAge, "N/A");
+                  this.patient = patient;
+                }
+
+                setSelectedRow(row){
+                  g_selectedRow = row;
+                }
+
+                clinicalInfoReadOnly(flag){
+                  if(flag || null){
+                    // readyOnly
+                    this.$.techClinicalInfo.hiddenClinicalInfo(true);
+                  }else{
+                    // modify
+                    this.$.techClinicalInfo.hiddenClinicalInfo(false);
+                  }
+                }// cc change
+
+                setClinicalInfo(ccInfo) {
+                  this.$.techClinicalInfo.setClinicalInfo(ccInfo);
+                }
+
+                getWorkListNewId(id) {
+                  g_objId = id;
+
+                  getCaseByIdWithKeyImage(id).then( resultThumbnail => {
+                    this.$.techThumbnail.setExambyId(id, resultThumbnail);
+                  });
+
+                }
+
+                clearThumbnail() {
+                  this.$.techThumbnail.clearThumbnail();
+                }
+
+                clearClinicalInfo() {
+                  this.$.techClinicalInfo.clearClinicalInfo();
+                }
+
+                clearPatientInfo(){
+                  this.patient = null;    // 기존 patinet 초기화
+                  let patient = new Object();
+                  patient.id = null;
+                  patient.name = null;
+                  patient.sex = null;
+                  patient.age = null;
+                  this.patient = patient;
+                }
+
               }
 
               window.customElements.define(HhTechWindow.is, HhTechWindow);
