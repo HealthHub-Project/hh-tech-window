@@ -202,7 +202,7 @@
           </div>
         </div>
         <div class="class-content-tm"style="color:white">
-          <hh-thumbnail id="techThumbnail"></hh-thumbnail>
+          <hh-thumbnail id="techThumbnail" ></hh-thumbnail>
         </div>
       </div>
       <div class="class-div-clinicalInfo">
@@ -264,9 +264,13 @@
 
                 ready(){
                   super.ready();
-                  console.log("hh-tech-window ready");
+                  // console.log("hh-tech-window ready");
                   // this.patient = {id: "1450", name: "안길종", sex: "M", age: "47"}
                   this.clinicalInfoReadOnly(false);
+
+                  this.$.techClinicalInfo.addEventListener('clinicalInfoSaveEvent',function (e) {
+                    _this.dispatchEvent(new CustomEvent('clinicalInfoSaveEvent', e));
+                  });
 
                 }
 
@@ -345,6 +349,14 @@
                   patient.sex = null;
                   patient.age = null;
                   this.patient = patient;
+                }
+
+                diabledThumbnail(){
+                  this.$.techThumbnail.style.display = "none";
+                }
+
+                abledThumbnail(){
+                  this.$.techThumbnail.style.display = "block";
                 }
 
               }
