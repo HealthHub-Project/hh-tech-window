@@ -202,7 +202,8 @@
           </div>
         </div>
         <div class="class-content-tm"style="color:white">
-          <hh-thumbnail id="techThumbnail" ></hh-thumbnail>
+          <!-- TODO : Thumbnail 2개 선언시 오류 수정 -->
+          <!--          <hh-thumbnail id="techThumbnail" ></hh-thumbnail>-->
         </div>
       </div>
       <div class="class-div-clinicalInfo">
@@ -223,22 +224,22 @@
         </div>
         <div class="class-content-fp" style="color: white">
           <div class="icon-container">
-            <paper-icon-button id="matched" icon="vaadin:copy-o" on-click="" disabled></paper-icon-button>
+            <paper-icon-button id="matchedBtn" icon="vaadin:copy-o" on-click="" ></paper-icon-button>
             <span class="label-top" id="textMach">Match</span><span class="label-top" id="textUnMatch" style="display: none">UnMatch</span>
           </div>&nbsp;&nbsp;&nbsp;
 
           <div class="icon-container">
-            <paper-icon-button id="matched" icon="vaadin:file-add" on-click="" disabled></paper-icon-button>
+            <paper-icon-button id="mergedBtn" icon="vaadin:file-add" on-click="" ></paper-icon-button>
             <span class="label-top" id="textMerge">Merge</span><span class="label-top" id="textSplit" style="display: none">Split</span>
           </div>&nbsp;&nbsp;&nbsp;
 
           <div class="icon-container">
-            <paper-icon-button id="matched" icon="vaadin:specialist" on-click="" disabled></paper-icon-button>
+            <paper-icon-button id="verifiedBtn" icon="vaadin:specialist" on-click="" ></paper-icon-button>
             <span class="label-top" id="textVerify">Verify</span><span class="label-top" id="textUnVerify" style="display: none">UnVerify</span>
           </div>&nbsp;&nbsp;&nbsp;
 
           <div class="icon-container">
-            <paper-icon-button id="matched" icon="vaadin:file-remove" on-click="" disabled></paper-icon-button>
+            <paper-icon-button id="deletedBtn" icon="vaadin:file-remove" on-click="" ></paper-icon-button>
             <span class="label-top" id="textDelete">Delete</span>
           </div>&nbsp;&nbsp;&nbsp;
         </div>
@@ -271,6 +272,22 @@
                   this.$.techClinicalInfo.addEventListener('clinicalInfoSaveEvent',function (e) {
                     _this.dispatchEvent(new CustomEvent('clinicalInfoSaveEvent', e));
                   });
+
+                  this.$.matchedBtn.addEventListener('click',function (e) {
+                    _this.clickFunctionPanelBtn("match");
+                  });
+
+                  this.$.mergedBtn.addEventListener('click',function (e) {
+                    _this.clickFunctionPanelBtn("merge");
+                  })
+
+                  this.$.verifiedBtn.addEventListener('click',function (e) {
+                    _this.clickFunctionPanelBtn("verify");
+                  })
+
+                  this.$.deletedBtn.addEventListener('click',function (e) {
+                    _this.clickFunctionPanelBtn("delete");
+                  })
 
                 }
 
@@ -328,13 +345,14 @@
                   g_objId = id;
 
                   getCaseByIdWithKeyImage(id).then( resultThumbnail => {
-                    this.$.techThumbnail.setExambyId(id, resultThumbnail);
+                    // this.$.techThumbnail.setExambyId(id, resultThumbnail);
                   });
 
                 }
 
                 clearThumbnail() {
-                  this.$.techThumbnail.clearThumbnail();
+                  /* TODO : Thumbnail 오류 수정후 주석 제거 */
+                  // this.$.techThumbnail.clearThumbnail();
                 }
 
                 clearClinicalInfo() {
@@ -357,6 +375,29 @@
 
                 abledThumbnail(){
                   this.$.techThumbnail.style.display = "block";
+                }
+
+                setThumbnailInit(){
+                  this.$.techThumbnail.clearThumbnail();
+                }
+
+                clickFunctionPanelBtn(btn){
+                  switch (btn) {
+                    case "match":
+                      this.dispatchEvent(new CustomEvent('matchedClickEvent'));
+                      break;
+                    case "merge":
+                      this.dispatchEvent(new CustomEvent('mergedClickEvent'));
+                      break;
+                    case "verify":
+                      this.dispatchEvent(new CustomEvent('verifyClickEvent'));
+                      break;
+                    case "delete":
+                      this.dispatchEvent(new CustomEvent('deletedClickEvent'));
+                      break;
+                    default :
+                      break;
+                  }
                 }
 
               }
