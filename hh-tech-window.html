@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../hh-thumbnail/hh-thumbnail.html">
+<link rel="import" href="../hh-thumbnail2/hh-techthumbnail.html">
 <link rel="import" href="../hh-clinical-info/hh-clinical-info.html">
 
 <dom-module id="hh-tech-window">
@@ -69,7 +69,7 @@
 
       .class-title-window{
         color: gray;
-        width: 115px;
+        width: 122px;
       }
 
       .class-title{
@@ -179,7 +179,6 @@
         font-size: 12px;
       }
 
-
     </style>
     <div class="container">
       <div class="class-container-title">
@@ -197,18 +196,19 @@
       </div><!--window title-->
       <div class="class-div-thumbnail" >
         <div class="class-title">
-          <div class="class-title-content" style="width: 69px">
+          <div class="class-title-content" style="width: 68px">
             Thumbnail
           </div>
         </div>
         <div class="class-content-tm"style="color:white">
           <!-- TODO : Thumbnail 2개 선언시 오류 수정 -->
-          <!--          <hh-thumbnail id="techThumbnail" ></hh-thumbnail>-->
+          <!-- 임시 썸네일 사용 추후 하나 썸네일로 수정 -->
+          <hh-techthumbnail id="techThumbnail" ></hh-techthumbnail>
         </div>
       </div>
       <div class="class-div-clinicalInfo">
         <div class="class-title">
-          <div class="class-title-content" style="width: 75px">
+          <div class="class-title-content" style="width: 70px">
             Clinical Info
           </div>
         </div>
@@ -218,7 +218,7 @@
       </div>
       <div class="class-div-functionPanel">
         <div class="class-title">
-          <div class="class-title-content" style="width: 92px">
+          <div class="class-title-content" style="width: 90px">
             Function Panel
           </div>
         </div>
@@ -343,16 +343,16 @@
 
                 getWorkListNewId(id) {
                   g_objId = id;
-
                   getCaseByIdWithKeyImage(id).then( resultThumbnail => {
-                    // this.$.techThumbnail.setExambyId(id, resultThumbnail);
+                    /* TODO : Thumbnail 오류 수정후 주석 제거 */
+                    this.$.techThumbnail.setExambyId(id, resultThumbnail);
                   });
 
                 }
 
                 clearThumbnail() {
                   /* TODO : Thumbnail 오류 수정후 주석 제거 */
-                  // this.$.techThumbnail.clearThumbnail();
+                  this.$.techThumbnail.clearThumbnail();
                 }
 
                 clearClinicalInfo() {
