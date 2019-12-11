@@ -3,7 +3,7 @@
   "main": "hh-tech-window.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "hh-thumbnail": "hh-thumbnail#1.0.4",
+    "hh-thumbnail": "hh-thumbnail#1.0.5",
     "hh-thumbnail2": "*",
     "hh-clinical-info": "*"
   },
