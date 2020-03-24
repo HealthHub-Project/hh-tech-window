@@ -105,7 +105,8 @@
       }
 
       .class-div-clinicalInfo{
-        height: calc(100% - 600px);
+        /*height: calc(100% - 600px);*/
+        height: 100%;
         width: 100%;
         background-color: rgba(255,0,0,0);
       }
@@ -216,7 +217,7 @@
           <hh-clinical-info id="techClinicalInfo"></hh-clinical-info>
         </div>
       </div>
-      <div class="class-div-functionPanel">
+      <div class="class-div-functionPanel" style="display: none">
         <div class="class-title">
           <div class="class-title-content" style="width: 95px">
             Function Panel
@@ -251,159 +252,159 @@
      * hh-tech-window
      */
     (function () {
-              let _this;
-              let g_selectedRow = new Object();
-              let g_objId;
+            let _this;
+            let g_selectedRow = new Object();
+            let g_objId;
 
-              class HhTechWindow extends Polymer.Element {
-                static get is() { return 'hh-tech-window'; }
+            class HhTechWindow extends Polymer.Element {
+              static get is() { return 'hh-tech-window'; }
 
-                constructor() {
-                  super();
-                  _this = this;
-                }
+              constructor() {
+                super();
+                _this = this;
+              }
 
-                ready(){
-                  super.ready();
-                  // console.log("hh-tech-window ready");
-                  // this.patient = {id: "1450", name: "안길종", sex: "M", age: "47"}
-                  this.clinicalInfoReadOnly(false);
+              ready(){
+                super.ready();
+                // console.log("hh-tech-window ready");
+                // this.patient = {id: "1450", name: "안길종", sex: "M", age: "47"}
+                this.clinicalInfoReadOnly(false);
 
-                  this.$.techClinicalInfo.addEventListener('clinicalInfoSaveEvent',function (e) {
-                    _this.dispatchEvent(new CustomEvent('clinicalInfoSaveEvent', e));
-                  });
+                this.$.techClinicalInfo.addEventListener('clinicalInfoSaveEvent',function (e) {
+                  _this.dispatchEvent(new CustomEvent('clinicalInfoSaveEvent', e));
+                });
 
-                  this.$.matchedBtn.addEventListener('click',function (e) {
-                    _this.clickFunctionPanelBtn("match");
-                  });
+                this.$.matchedBtn.addEventListener('click',function (e) {
+                  _this.clickFunctionPanelBtn("match");
+                });
 
-                  this.$.mergedBtn.addEventListener('click',function (e) {
-                    _this.clickFunctionPanelBtn("merge");
-                  })
+                this.$.mergedBtn.addEventListener('click',function (e) {
+                  _this.clickFunctionPanelBtn("merge");
+                })
 
-                  this.$.verifiedBtn.addEventListener('click',function (e) {
-                    _this.clickFunctionPanelBtn("verify");
-                  })
+                this.$.verifiedBtn.addEventListener('click',function (e) {
+                  _this.clickFunctionPanelBtn("verify");
+                })
 
-                  this.$.deletedBtn.addEventListener('click',function (e) {
-                    _this.clickFunctionPanelBtn("delete");
-                  })
-
-                }
-
-                static get properties() {
-                  return {
-                    patient: {
-                      type: Object
-                    }
-                  }
-                }
-
-                isEmpty(str) {
-                  if(typeof  str == "undefined" || str == null || str == "")
-                    return true;
-                  else
-                    return false;
-                }
-
-                nvl(str, defaultStr) {
-                  if(typeof str =="undefined" || str == null || str == "")
-                    str = defaultStr;
-                  return str;
-
-                }
-
-                setPatinetInfo(patientId, patientName, patientSex, patientAge) {
-                  this.patient = null;    // 기존 patinet 초기화
-                  let patient = new Object();
-                  patient.id = this.nvl(patientId, "N/A");
-                  patient.name = this.nvl(patientName, "N/A");
-                  patient.sex = this.nvl(patientSex, "N/A");
-                  patient.age = this.nvl(patientAge, "N/A");
-                  this.patient = patient;
-                }
-
-                setSelectedRow(row){
-                  g_selectedRow = row;
-                }
-
-                clinicalInfoReadOnly(flag){
-                  if(flag || null){
-                    // readyOnly
-                    this.$.techClinicalInfo.hiddenClinicalInfo(true);
-                  }else{
-                    // modify
-                    this.$.techClinicalInfo.hiddenClinicalInfo(false);
-                  }
-                }// cc change
-
-                setClinicalInfo(ccInfo) {
-                  this.$.techClinicalInfo.setClinicalInfo(ccInfo);
-                }
-
-                getWorkListNewId(id) {
-                  g_objId = id;
-                  getCaseByIdWithKeyImage(id).then( resultThumbnail => {
-                    /* TODO : Thumbnail 오류 수정후 주석 제거 */
-                    this.$.techThumbnail.setExambyId(id, resultThumbnail);
-                  });
-
-                }
-
-                clearThumbnail() {
-                  /* TODO : Thumbnail 오류 수정후 주석 제거 */
-                  this.$.techThumbnail.clearThumbnail();
-                }
-
-                clearClinicalInfo() {
-                  this.$.techClinicalInfo.clearClinicalInfo();
-                }
-
-                clearPatientInfo(){
-                  this.patient = null;    // 기존 patinet 초기화
-                  let patient = new Object();
-                  patient.id = null;
-                  patient.name = null;
-                  patient.sex = null;
-                  patient.age = null;
-                  this.patient = patient;
-                }
-
-                diabledThumbnail(){
-                  this.$.techThumbnail.style.display = "none";
-                }
-
-                abledThumbnail(){
-                  this.$.techThumbnail.style.display = "block";
-                }
-
-                setThumbnailInit(){
-                  this.$.techThumbnail.clearThumbnail();
-                }
-
-                clickFunctionPanelBtn(btn){
-                  switch (btn) {
-                    case "match":
-                      this.dispatchEvent(new CustomEvent('matchedClickEvent'));
-                      break;
-                    case "merge":
-                      this.dispatchEvent(new CustomEvent('mergedClickEvent'));
-                      break;
-                    case "verify":
-                      this.dispatchEvent(new CustomEvent('verifyClickEvent'));
-                      break;
-                    case "delete":
-                      this.dispatchEvent(new CustomEvent('deletedClickEvent'));
-                      break;
-                    default :
-                      break;
-                  }
-                }
+                this.$.deletedBtn.addEventListener('click',function (e) {
+                  _this.clickFunctionPanelBtn("delete");
+                })
 
               }
 
-              window.customElements.define(HhTechWindow.is, HhTechWindow);
+              static get properties() {
+                return {
+                  patient: {
+                    type: Object
+                  }
+                }
+              }
+
+              isEmpty(str) {
+                if(typeof  str == "undefined" || str == null || str == "")
+                  return true;
+                else
+                  return false;
+              }
+
+              nvl(str, defaultStr) {
+                if(typeof str =="undefined" || str == null || str == "")
+                  str = defaultStr;
+                return str;
+
+              }
+
+              setPatinetInfo(patientId, patientName, patientSex, patientAge) {
+                this.patient = null;    // 기존 patinet 초기화
+                let patient = new Object();
+                patient.id = this.nvl(patientId, "N/A");
+                patient.name = this.nvl(patientName, "N/A");
+                patient.sex = this.nvl(patientSex, "N/A");
+                patient.age = this.nvl(patientAge, "N/A");
+                this.patient = patient;
+              }
+
+              setSelectedRow(row){
+                g_selectedRow = row;
+              }
+
+              clinicalInfoReadOnly(flag){
+                if(flag || null){
+                  // readyOnly
+                  this.$.techClinicalInfo.hiddenClinicalInfo(true);
+                }else{
+                  // modify
+                  this.$.techClinicalInfo.hiddenClinicalInfo(false);
+                }
+              }// cc change
+
+              setClinicalInfo(ccInfo) {
+                this.$.techClinicalInfo.setClinicalInfo(ccInfo);
+              }
+
+              getWorkListNewId(id) {
+                g_objId = id;
+                getCaseByIdWithKeyImage(id).then( resultThumbnail => {
+                  /* TODO : Thumbnail 오류 수정후 주석 제거 */
+                  this.$.techThumbnail.setExambyId(id, resultThumbnail);
+                });
+
+              }
+
+              clearThumbnail() {
+                /* TODO : Thumbnail 오류 수정후 주석 제거 */
+                this.$.techThumbnail.clearThumbnail();
+              }
+
+              clearClinicalInfo() {
+                this.$.techClinicalInfo.clearClinicalInfo();
+              }
+
+              clearPatientInfo(){
+                this.patient = null;    // 기존 patinet 초기화
+                let patient = new Object();
+                patient.id = null;
+                patient.name = null;
+                patient.sex = null;
+                patient.age = null;
+                this.patient = patient;
+              }
+
+              diabledThumbnail(){
+                this.$.techThumbnail.style.display = "none";
+              }
+
+              abledThumbnail(){
+                this.$.techThumbnail.style.display = "block";
+              }
+
+              setThumbnailInit(){
+                this.$.techThumbnail.clearThumbnail();
+              }
+
+              clickFunctionPanelBtn(btn){
+                switch (btn) {
+                  case "match":
+                    this.dispatchEvent(new CustomEvent('matchedClickEvent'));
+                    break;
+                  case "merge":
+                    this.dispatchEvent(new CustomEvent('mergedClickEvent'));
+                    break;
+                  case "verify":
+                    this.dispatchEvent(new CustomEvent('verifyClickEvent'));
+                    break;
+                  case "delete":
+                    this.dispatchEvent(new CustomEvent('deletedClickEvent'));
+                    break;
+                  default :
+                    break;
+                }
+              }
+
             }
+
+            window.customElements.define(HhTechWindow.is, HhTechWindow);
+          }
     )();
   </script>
 </dom-module>
